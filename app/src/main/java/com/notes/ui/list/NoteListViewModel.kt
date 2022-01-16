@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.notes.data.NoteDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 class NoteListViewModel @Inject constructor(
@@ -27,6 +28,7 @@ class NoteListViewModel @Inject constructor(
                         id = it.id,
                         title = it.title,
                         content = it.content,
+                        modifiedAt = it.modifiedAt,
                     )
                 }
             )
@@ -43,4 +45,5 @@ data class NoteListItem(
     val id: Long,
     val title: String,
     val content: String,
+    val modifiedAt: LocalDateTime,
 )

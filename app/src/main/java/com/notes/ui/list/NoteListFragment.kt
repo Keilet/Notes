@@ -43,7 +43,7 @@ class NoteListFragment : ViewBindingFragment<FragmentNoteListBinding>(
             viewLifecycleOwner,
             {
                 if (it != null) {
-                    recyclerViewAdapter.setItems(it)
+                    recyclerViewAdapter.setItems(it.sortedByDescending { it.modifiedAt })
                 }
             }
         )
@@ -102,6 +102,7 @@ class NoteListFragment : ViewBindingFragment<FragmentNoteListBinding>(
             ) {
                 binding.titleLabel.text = note.title
                 binding.contentLabel.text = note.content
+                binding.modifiedLabel.text = note.modifiedAt.toString()
             }
 
         }
