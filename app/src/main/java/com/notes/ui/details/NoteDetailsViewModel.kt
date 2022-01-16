@@ -13,13 +13,18 @@ class NoteDetailsViewModel @Inject constructor(
     private val noteDatabase: NoteDatabase
 ) : ViewModel() {
 
-    fun onSaveNoteClick(title: String, content: String) {
+    fun onSaveNoteClick(id: Long, title: String, content: String) {
         var modified: LocalDateTime = LocalDateTime.now()
-        var createNote = NoteDbo(0,title, content, modified, modified)
-        viewModelScope.launch(Dispatchers.IO) {
-            noteDatabase.noteDao().insertAll(createNote)
+        if (id>0){
+            viewModelScope.launch(Dispatchers.IO) {
+                noteDatabase.noteDao().update(id,title,content,modified)
+            }
+        } else {
+            var createNote = NoteDbo(id, title, content, modified, modified)
+            viewModelScope.launch(Dispatchers.IO) {
+                noteDatabase.noteDao().insertAll(createNote)
+            }
         }
-
     }
 
     fun onDeleteNoteClick(id: Long) {

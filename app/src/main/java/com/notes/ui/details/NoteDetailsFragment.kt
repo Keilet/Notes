@@ -52,6 +52,7 @@ class NoteDetailsFragment(note: NoteListItem) : ViewBindingFragment<FragmentNote
 
             } else {
                 viewModel.onSaveNoteClick(
+                    detailsId,
                     detailsTitle.text.toString(),
                     detailsContent.text.toString(),
                 )
