@@ -21,4 +21,10 @@ class NoteDetailsViewModel @Inject constructor(
         }
 
     }
+
+    fun onDeleteNoteClick(id: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            noteDatabase.noteDao().delete(id)
+        }
+    }
 }

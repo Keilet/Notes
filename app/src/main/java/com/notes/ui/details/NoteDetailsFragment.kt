@@ -36,6 +36,7 @@ class NoteDetailsFragment(note: NoteListItem) : ViewBindingFragment<FragmentNote
         } else {
             detailsTitle.text.clear()
             detailsContent.text.clear()
+            viewBinding.deleteButton.visibility=View.GONE
         }
 
         viewBinding.saveButton.setOnClickListener {
@@ -56,6 +57,14 @@ class NoteDetailsFragment(note: NoteListItem) : ViewBindingFragment<FragmentNote
                 )
                 Toast.makeText(context, "Заметка сохранена", Toast.LENGTH_LONG).show()
             }
+        }
+
+        viewBinding.deleteButton.setOnClickListener {
+            viewModel.onDeleteNoteClick(
+                note.id
+            )
+            Toast.makeText(context, "Заметка удалена", Toast.LENGTH_LONG).show()
+            (activity as RootActivity).onBackPressed()
         }
     }
 }

@@ -13,4 +13,7 @@ interface NoteDao {
     @Insert
     fun insertAll(vararg notes: NoteDbo)
 
+    @Query("DELETE FROM notes WHERE id = :id")
+    fun delete(id: Long)
+
 }
