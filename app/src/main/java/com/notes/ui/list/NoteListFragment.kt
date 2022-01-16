@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.notes.databinding.FragmentNoteListBinding
@@ -57,14 +58,24 @@ class NoteListFragment : ViewBindingFragment<FragmentNoteListBinding>(
             viewModel.onCreateNoteClick()
         }
 
-        viewModel.notes.observe(
+/*        viewModel.notes.observe(
             viewLifecycleOwner,
             {
                 if (it != null) {
                     recyclerViewAdapter.setItems(it.sortedByDescending { it.modifiedAt })
                 }
             }
+        )*/
+
+        viewModel.notes.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    recyclerViewAdapter.refreshNotes(it.sortedByDescending { it.modifiedAt })
+                }
+            }
         )
+
         viewModel.navigateToNoteCreation.observe(
             viewLifecycleOwner,
             {
@@ -80,7 +91,7 @@ class NoteListFragment : ViewBindingFragment<FragmentNoteListBinding>(
     private class RecyclerViewAdapter (onClickListener:OnClickListener) :
         RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
 
-        private val items = mutableListOf<NoteListItem>()
+        private var items = mutableListOf<NoteListItem>()
 
         interface OnClickListener{
             fun onClick(note: NoteListItem,position: Int)
@@ -111,13 +122,20 @@ class NoteListFragment : ViewBindingFragment<FragmentNoteListBinding>(
 
         override fun getItemCount() = items.size
 
-        fun setItems(
+/*        fun setItems(
             items: List<NoteListItem>
         ) {
             this.items.clear()
             this.items.addAll(items)
             notifyDataSetChanged()
+        }*/
+
+        fun refreshNotes(item: List<NoteListItem>) {
+            this.items = item as MutableList<NoteListItem>
+            notifyDataSetChanged()
         }
+
+
 
         private class ViewHolder(
             private val binding: ListItemNoteBinding
@@ -130,7 +148,6 @@ class NoteListFragment : ViewBindingFragment<FragmentNoteListBinding>(
             ) {
                 binding.titleLabel.text = note.title
                 binding.contentLabel.text = note.content
-                binding.modifiedLabel.text = note.modifiedAt.toString()
             }
 
         }
