@@ -28,6 +28,7 @@ class NoteListViewModel @Inject constructor(
                         id = it.id,
                         title = it.title,
                         content = it.content,
+                        createdAt = it.createdAt,
                         modifiedAt = it.modifiedAt,
                     )
                 }
@@ -45,5 +46,6 @@ data class NoteListItem(
     val id: Long,
     val title: String,
     val content: String,
+    val createdAt: LocalDateTime,
     val modifiedAt: LocalDateTime,
 )

@@ -1,16 +1,21 @@
 package com.notes.ui.details
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import com.notes.databinding.FragmentNoteDetailsBinding
 import com.notes.di.DependencyManager
 import com.notes.ui.RootActivity
 import com.notes.ui._base.ViewBindingFragment
+import com.notes.ui.list.NoteListItem
 
-class NoteDetailsFragment : ViewBindingFragment<FragmentNoteDetailsBinding>(
+class NoteDetailsFragment(note: NoteListItem) : ViewBindingFragment<FragmentNoteDetailsBinding>(
     FragmentNoteDetailsBinding::inflate
 ) {
     private val viewModel by lazy { DependencyManager.noteDetailsViewModel() }
+
+    val note = note
+
     override fun onViewBindingCreated(
         viewBinding: FragmentNoteDetailsBinding,
         savedInstanceState: Bundle?
@@ -22,6 +27,16 @@ class NoteDetailsFragment : ViewBindingFragment<FragmentNoteDetailsBinding>(
         }
         var detailsTitle = viewBinding.detailsTitleLabel
         var detailsContent = viewBinding.detailsContentLabel
+        var detailsId=note.id
+
+        if (detailsId > 0) {
+            detailsTitle.setText(note.title)
+            detailsContent.setText(note.content)
+            viewBinding.toolbar.title = note.title
+        } else {
+            detailsTitle.text.clear()
+            detailsContent.text.clear()
+        }
 
         viewBinding.saveButton.setOnClickListener {
             if (detailsTitle.text.isNullOrEmpty()) {
