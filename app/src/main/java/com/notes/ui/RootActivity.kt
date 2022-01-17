@@ -10,6 +10,7 @@ import com.notes.ui.list.NoteListFragment
 class RootActivity : AppCompatActivity(), FragmentNavigator {
 
     private var viewBinding: ActivityRootBinding? = null
+    private lateinit var fragmentCurrent: Fragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +29,7 @@ class RootActivity : AppCompatActivity(), FragmentNavigator {
     override fun navigateTo(
         fragment: Fragment
     ) {
+        fragmentCurrent=fragment
         val viewBinding = this.viewBinding ?: return
         supportFragmentManager
             .beginTransaction()
@@ -42,7 +44,9 @@ class RootActivity : AppCompatActivity(), FragmentNavigator {
         if (supportFragmentManager.backStackEntryCount > 0) {
             supportFragmentManager.popBackStack()
         } else {
-            super.onBackPressed()
+            viewBinding?.container?.let {
+                supportFragmentManager.beginTransaction().replace(it.id,NoteListFragment()).commit()
+            }
         }
     }
 

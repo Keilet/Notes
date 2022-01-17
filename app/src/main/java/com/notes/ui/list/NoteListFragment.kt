@@ -29,21 +29,22 @@ class NoteListFragment : ViewBindingFragment<FragmentNoteListBinding>(
     ) {
         super.onViewBindingCreated(viewBinding, savedInstanceState)
 
-        val noteListClickListener: RecyclerViewAdapter.OnClickListener = object : RecyclerViewAdapter.OnClickListener {
-            override fun onClick(note: NoteListItem, position: Int) {
-                viewModel.navigateToNoteCreation.observe(
-                    viewLifecycleOwner,
-                    {
-                        findImplementationOrThrow<FragmentNavigator>()
-                            .navigateTo(
-                                NoteDetailsFragment(note)
-                            )
+        val noteListClickListener: RecyclerViewAdapter.OnClickListener =
+            object : RecyclerViewAdapter.OnClickListener {
+                override fun onClick(note: NoteListItem, position: Int) {
+                    viewModel.navigateToNoteCreation.observe(
+                        viewLifecycleOwner,
+                        {
+                            findImplementationOrThrow<FragmentNavigator>()
+                                .navigateTo(
+                                    NoteDetailsFragment(note)
+                                )
 
-                    }
-                )
-                viewModel.onCreateNoteClick()
+                        }
+                    )
+                    viewModel.onCreateNoteClick()
+                }
             }
-        }
 
         val recyclerViewAdapter = RecyclerViewAdapter(noteListClickListener)
 
@@ -81,22 +82,31 @@ class NoteListFragment : ViewBindingFragment<FragmentNoteListBinding>(
             {
                 findImplementationOrThrow<FragmentNavigator>()
                     .navigateTo(
-                        NoteDetailsFragment(NoteListItem(0,"","", LocalDateTime.now(),LocalDateTime.now()))
+                        NoteDetailsFragment(
+                            NoteListItem(
+                                0,
+                                "",
+                                "",
+                                LocalDateTime.now(),
+                                LocalDateTime.now()
+                            )
+                        )
                     )
 
             }
         )
     }
 
-    private class RecyclerViewAdapter (onClickListener:OnClickListener) :
+    private class RecyclerViewAdapter(onClickListener: OnClickListener) :
         RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
 
         private var items = mutableListOf<NoteListItem>()
 
-        interface OnClickListener{
-            fun onClick(note: NoteListItem,position: Int)
+        interface OnClickListener {
+            fun onClick(note: NoteListItem, position: Int)
         }
-        var thisClickListener:OnClickListener=onClickListener
+
+        var thisClickListener: OnClickListener = onClickListener
 
         override fun onCreateViewHolder(
             parent: ViewGroup,
@@ -113,10 +123,10 @@ class NoteListFragment : ViewBindingFragment<FragmentNoteListBinding>(
             holder: ViewHolder,
             position: Int
         ) {
-            var note:NoteListItem=items[position]
+            var note: NoteListItem = items[position]
             holder.bind(items[position])
             holder.itemView.setOnClickListener(View.OnClickListener {
-                thisClickListener.onClick(note,position)
+                thisClickListener.onClick(note, position)
             })
         }
 
@@ -134,7 +144,6 @@ class NoteListFragment : ViewBindingFragment<FragmentNoteListBinding>(
             this.items = item as MutableList<NoteListItem>
             notifyDataSetChanged()
         }
-
 
 
         private class ViewHolder(
